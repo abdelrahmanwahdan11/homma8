@@ -1,0 +1,37 @@
+name: auction_app
+description: A glassmorphism auction marketplace built with Flutter and GetX.
+publish_to: 'none'
+version: 0.1.0+1
+
+environment:
+  sdk: '>=3.3.0 <4.0.0'
+  flutter: '>=3.22.0'
+
+dependencies:
+  flutter:
+    sdk: flutter
+  cupertino_icons: ^1.0.6
+  get: ^4.6.6
+  google_fonts: ^6.2.1
+  shared_preferences: ^2.2.3
+  flutter_animate: ^4.5.0
+  card_swiper: ^3.0.1
+  infinite_scroll_pagination: ^4.0.0
+  intl: ^0.19.0
+  animations: ^2.0.8
+  cached_network_image: ^3.3.1
+  transparent_image: ^2.0.1
+  pull_to_refresh_flutter3: ^2.0.2
+  flutter_staggered_grid_view: ^0.7.0
+  url_launcher: ^6.3.0
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  flutter_lints: ^3.0.1
+
+flutter:
+  uses-material-design: true
+  assets:
+    - assets/i18n/
+    - assets/mock/
