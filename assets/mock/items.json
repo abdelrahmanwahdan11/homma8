@@ -1,0 +1,87 @@
+[
+  {
+    "id": "apt-001",
+    "category": "apartments",
+    "title": "Skyline Loft Downtown",
+    "description": "Sunlit loft with skyline views and smart climate control.",
+    "images": [
+      "https://images.unsplash.com/photo-1505691723518-36a5ac3be353",
+      "https://images.unsplash.com/photo-1505691938895-1758d7feb511"
+    ],
+    "location": "Dubai Marina",
+    "distanceKm": 4.2,
+    "currentBid": 245000,
+    "startPrice": 200000,
+    "buyNowPrice": 265000,
+    "currency": "AED",
+    "startAt": "2024-07-01T10:00:00Z",
+    "endAt": "2024-07-05T18:00:00Z",
+    "specs": {
+      "bedrooms": "2",
+      "bathrooms": "2",
+      "area": "145 sqm",
+      "parking": "1",
+      "furnishing": "Semi"
+    },
+    "isFavorite": false,
+    "watching": true,
+    "views": 320,
+    "aiSummary": "Premium loft with double-height ceilings, energy-efficient glazing, and included smart appliances."
+  },
+  {
+    "id": "car-302",
+    "category": "cars",
+    "title": "Tesla Model Y Performance",
+    "description": "Dual-motor AWD with FSD trial and ceramic coating.",
+    "images": [
+      "https://images.unsplash.com/photo-1549921296-3b4a4f9c9d89",
+      "https://images.unsplash.com/photo-1502877338535-766e1452684a"
+    ],
+    "location": "Abu Dhabi",
+    "distanceKm": 98.0,
+    "currentBid": 180000,
+    "startPrice": 150000,
+    "buyNowPrice": null,
+    "currency": "AED",
+    "startAt": "2024-07-02T08:00:00Z",
+    "endAt": "2024-07-04T20:00:00Z",
+    "specs": {
+      "year": "2022",
+      "range": "480 km",
+      "battery": "Long Range",
+      "color": "Pearl White",
+      "warranty": "24 months"
+    },
+    "isFavorite": true,
+    "watching": true,
+    "views": 512,
+    "aiSummary": "Low mileage EV with performance upgrade, full software bundle, and verified service record."
+  },
+  {
+    "id": "tech-902",
+    "category": "smart_devices",
+    "title": "Apple Vision Pro",
+    "description": "256GB immersive headset with travel case and dual loop.",
+    "images": [
+      "https://images.unsplash.com/photo-1527443224154-9c7f4c4c8a59"
+    ],
+    "location": "Sharjah",
+    "distanceKm": 22.5,
+    "currentBid": 9500,
+    "startPrice": 7200,
+    "buyNowPrice": 11200,
+    "currency": "AED",
+    "startAt": "2024-07-01T06:00:00Z",
+    "endAt": "2024-07-03T18:30:00Z",
+    "specs": {
+      "condition": "Like New",
+      "bundle": "Travel kit",
+      "warranty": "10 months",
+      "color": "Silver"
+    },
+    "isFavorite": false,
+    "watching": false,
+    "views": 210,
+    "aiSummary": "Barely used with full accessories and extended warranty for immersive productivity."
+  }
+]

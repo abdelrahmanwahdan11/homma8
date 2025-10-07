@@ -1,0 +1,14 @@
+[
+  {
+    "itemId": "car-302",
+    "amount": 175000,
+    "time": "2024-07-02T12:00:00Z",
+    "status": "accepted"
+  },
+  {
+    "itemId": "apt-001",
+    "amount": 240000,
+    "time": "2024-07-03T09:30:00Z",
+    "status": "pending"
+  }
+]
