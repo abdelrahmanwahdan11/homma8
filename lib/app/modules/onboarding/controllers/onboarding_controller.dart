@@ -1,11 +1,11 @@
-import 'package:card_swiper/card_swiper.dart';
+import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 import '../../../data/services/settings_service.dart';
 import '../../../routes/app_routes.dart';
 
 class OnboardingController extends GetxController {
-  final swiperController = SwiperController();
+  final pageController = PageController();
   final pageIndex = 0.obs;
 
   void onPageChanged(int index) => pageIndex.value = index;
@@ -15,7 +15,10 @@ class OnboardingController extends GetxController {
       complete();
       return;
     }
-    swiperController.next(animation: true);
+    pageController.nextPage(
+      duration: const Duration(milliseconds: 350),
+      curve: Curves.easeOutCubic,
+    );
   }
 
   Future<void> complete() async {
@@ -28,7 +31,7 @@ class OnboardingController extends GetxController {
 
   @override
   void onClose() {
-    swiperController.dispose();
+    pageController.dispose();
     super.onClose();
   }
 }

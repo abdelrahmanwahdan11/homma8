@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -10,6 +12,38 @@ class SettingsService extends GetxService {
   static const _firstRunKey = 'firstRun';
   static const _recentSearchesKey = 'recentSearches';
   static const _savedFiltersKey = 'savedFilters';
+  static const _distanceUnitKey = 'distanceUnit';
+  static const _currencyKey = 'currency';
+  static const _featureFlagsKey = 'featureFlags';
+
+  static const Map<String, bool> _defaultFeatureFlags = {
+    'feature_recently_viewed': true,
+    'feature_compare_items': true,
+    'feature_hot_badges': true,
+    'feature_ai_insights_modes': true,
+    'feature_watchlist_banner': true,
+    'feature_price_projection': false,
+    'feature_distance_unit_toggle': true,
+    'feature_currency_conversion': true,
+    'feature_grid_density': true,
+    'feature_status_filters': true,
+    'feature_quick_bid_steps': true,
+    'feature_bid_confirmation_sheet': true,
+    'feature_outbid_alert': true,
+    'feature_saved_filters': true,
+    'feature_recent_searches': true,
+    'feature_keyboard_shortcuts': false,
+    'feature_reminder_scheduler': true,
+    'feature_safety_tips': true,
+    'feature_screenshot_card': false,
+    'feature_split_view': true,
+  };
+
+  static const Map<String, double> _currencyRates = {
+    'AED': 1.0,
+    'USD': 0.27,
+    'EUR': 0.25,
+  };
 
   final SharedPreferences _prefs;
 
@@ -18,6 +52,9 @@ class SettingsService extends GetxService {
   final isFirstRun = true.obs;
   final recentSearches = <String>[].obs;
   final savedFilters = <Map<String, dynamic>>[].obs;
+  final distanceUnit = 'km'.obs;
+  final currency = 'AED'.obs;
+  final featureToggles = <String, bool>{}.obs;
 
   Future<SettingsService> init() async {
     final themeString = _prefs.getString(_themeKey);
@@ -42,6 +79,19 @@ class SettingsService extends GetxService {
     recentSearches.assignAll(_prefs.getStringList(_recentSearchesKey) ?? []);
     final rawSaved = _prefs.getStringList(_savedFiltersKey) ?? [];
     savedFilters.assignAll(rawSaved.map((e) => Map<String, dynamic>.from(GetUtils.jsonDecode(e))));
+
+    distanceUnit.value = _prefs.getString(_distanceUnitKey) ?? 'km';
+    currency.value = _prefs.getString(_currencyKey) ?? 'AED';
+
+    final rawFeatures = _prefs.getString(_featureFlagsKey);
+    final decoded = rawFeatures == null
+        ? <String, dynamic>{}
+        : Map<String, dynamic>.from(jsonDecode(rawFeatures) as Map<String, dynamic>);
+    final merged = Map<String, bool>.from(_defaultFeatureFlags);
+    for (final entry in decoded.entries) {
+      merged[entry.key] = entry.value as bool;
+    }
+    featureToggles.assignAll(merged);
     return this;
   }
 
@@ -84,11 +134,48 @@ class SettingsService extends GetxService {
     await _prefs.remove(_recentSearchesKey);
   }
 
+  Future<void> removeRecentSearch(String query) async {
+    recentSearches.remove(query);
+    await _prefs.setStringList(_recentSearchesKey, recentSearches);
+  }
+
   Future<void> saveFilterPreset(Map<String, dynamic> preset) async {
     savedFilters.add(preset);
     final serialized = savedFilters
         .map((e) => GetUtils.jsonEncode(e))
         .toList(growable: false);
     await _prefs.setStringList(_savedFiltersKey, serialized);
+  }
+
+  Future<void> updateDistanceUnit(String unit) async {
+    distanceUnit.value = unit;
+    await _prefs.setString(_distanceUnitKey, unit);
+  }
+
+  Future<void> updateCurrency(String value) async {
+    currency.value = value;
+    await _prefs.setString(_currencyKey, value);
+  }
+
+  Future<void> toggleFeature(String key, bool enabled) async {
+    featureToggles[key] = enabled;
+    final encoded = jsonEncode(featureToggles);
+    await _prefs.setString(_featureFlagsKey, encoded);
+  }
+
+  String formatDistance(double km) {
+    if (distanceUnit.value == 'mi') {
+      final miles = km * 0.621371;
+      return '${miles.toStringAsFixed(1)} mi';
+    }
+    return '${km.toStringAsFixed(1)} km';
+  }
+
+  String formatPrice(double amount, String itemCurrency) {
+    final target = currency.value;
+    final baseRate = _currencyRates[itemCurrency] ?? 1.0;
+    final targetRate = _currencyRates[target] ?? 1.0;
+    final converted = amount * targetRate / baseRate;
+    return '$target ${converted.toStringAsFixed(0)}';
   }
 }

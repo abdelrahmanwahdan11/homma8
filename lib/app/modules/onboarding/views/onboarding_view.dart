@@ -1,6 +1,5 @@
 import 'dart:ui';
 
-import 'package:card_swiper/card_swiper.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -47,19 +46,10 @@ class OnboardingView extends GetView<OnboardingController> {
     return Scaffold(
       body: Stack(
         children: [
-          Swiper(
-            controller: controller.swiperController,
-            loop: false,
+          PageView.builder(
+            controller: controller.pageController,
             itemCount: slides.length,
-            onIndexChanged: controller.onPageChanged,
-            pagination: SwiperPagination(
-              builder: DotSwiperPaginationBuilder(
-                activeColor: theme.colorScheme.onPrimary,
-                color: theme.colorScheme.onPrimary.withOpacity(0.25),
-                size: 8,
-                activeSize: 10,
-              ),
-            ),
+            onPageChanged: controller.onPageChanged,
             itemBuilder: (context, index) {
               final slide = slides[index];
               return DecoratedBox(
@@ -130,6 +120,31 @@ class OnboardingView extends GetView<OnboardingController> {
                 ),
               );
             },
+          ),
+          Positioned(
+            bottom: 24,
+            left: 0,
+            right: 0,
+            child: Obx(
+              () => Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  for (var i = 0; i < slides.length; i++)
+                    AnimatedContainer(
+                      duration: const Duration(milliseconds: 200),
+                      margin: const EdgeInsets.symmetric(horizontal: 4),
+                      height: 8,
+                      width: controller.pageIndex.value == i ? 18 : 8,
+                      decoration: BoxDecoration(
+                        color: controller.pageIndex.value == i
+                            ? theme.colorScheme.onPrimary
+                            : theme.colorScheme.onPrimary.withOpacity(0.25),
+                        borderRadius: BorderRadius.circular(999),
+                      ),
+                    ),
+                ],
+              ),
+            ),
           ),
           SafeArea(
             child: Padding(
