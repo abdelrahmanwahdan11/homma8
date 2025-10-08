@@ -5,6 +5,8 @@ import 'core/app_state.dart';
 import 'core/localization/language_manager.dart';
 import 'core/theme/theme_manager.dart';
 import 'screens/splash_screen.dart';
+import 'widgets/glass_banner.dart';
+import 'widgets/gradient_background.dart';
 
 void main() {
   runApp(const AuctionApp());
@@ -42,11 +44,59 @@ class AuctionApp extends StatelessWidget {
                     ],
                     builder: (context, child) {
                       final lang = LanguageManager.of(context);
-                      return Directionality(
+                      final scope = AppState.of(context);
+                      final stackedChild = Directionality(
                         textDirection: lang.locale.languageCode == 'ar'
                             ? TextDirection.rtl
                             : TextDirection.ltr,
                         child: child ?? const SizedBox.shrink(),
+                      );
+
+                      return GradientBackground(
+                        child: SafeArea(
+                          top: false,
+                          bottom: false,
+                          child: Stack(
+                            children: [
+                              stackedChild,
+                              Positioned(
+                                left: 16,
+                                right: 16,
+                                top: 12,
+                                child: ValueListenableBuilder<String?>(
+                                  valueListenable: scope.bannerMessageNotifier,
+                                  builder: (context, message, _) {
+                                    if (message == null) {
+                                      return const SizedBox.shrink();
+                                    }
+                                    return AnimatedSwitcher(
+                                      duration: const Duration(milliseconds: 350),
+                                      transitionBuilder: (child, animation) {
+                                        return FadeTransition(
+                                          opacity: animation,
+                                          child: SlideTransition(
+                                            position: Tween<Offset>(
+                                              begin: const Offset(0, -0.2),
+                                              end: Offset.zero,
+                                            ).animate(CurvedAnimation(
+                                              parent: animation,
+                                              curve: Curves.easeOutQuad,
+                                            )),
+                                            child: child,
+                                          ),
+                                        );
+                                      },
+                                      child: GlassBanner(
+                                        key: ValueKey<String>(message),
+                                        message: message,
+                                      ),
+                                    );
+                                  },
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
                       );
                     },
                     onGenerateTitle: (context) =>

@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 
 import '../core/localization/language_manager.dart';
 import '../core/theme/theme_manager.dart';
+import '../widgets/gradient_background.dart';
 import 'onboarding/onboarding_screen.dart';
 
 class SplashScreen extends StatefulWidget {
@@ -47,35 +48,89 @@ class _SplashScreenState extends State<SplashScreen>
   Widget build(BuildContext context) {
     final themeManager = ThemeManager.of(context);
     final lang = LanguageManager.of(context);
-    return Scaffold(
-      backgroundColor: Theme.of(context).colorScheme.background,
-      floatingActionButton: FloatingActionButton(
-        onPressed: themeManager.toggleTheme,
-        child: const Icon(Icons.brightness_6_rounded),
-      ),
-      body: Center(
-        child: FadeTransition(
-          opacity: _opacity,
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              Hero(
-                tag: 'app_logo',
+    return GradientBackground(
+      child: Scaffold(
+        backgroundColor: Colors.transparent,
+        floatingActionButton: ValueListenableBuilder<ThemeMode>(
+          valueListenable: themeManager.themeNotifier,
+          builder: (context, mode, _) {
+            return FloatingActionButton(
+              onPressed: themeManager.toggleTheme,
+              child: AnimatedSwitcher(
+                duration: const Duration(milliseconds: 350),
                 child: Icon(
-                  Icons.gavel_rounded,
-                  size: 110,
-                  color: Theme.of(context).colorScheme.primary,
+                  mode == ThemeMode.dark
+                      ? Icons.wb_sunny_rounded
+                      : Icons.dark_mode_rounded,
+                  key: ValueKey<ThemeMode>(mode),
                 ),
               ),
-              const SizedBox(height: 20),
-              Text(
-                lang.t('auction_app'),
-                style: Theme.of(context)
-                    .textTheme
-                    .headlineMedium
-                    ?.copyWith(fontWeight: FontWeight.w800),
-              ),
-            ],
+            );
+          },
+        ),
+        body: Center(
+          child: FadeTransition(
+            opacity: _opacity,
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Hero(
+                  tag: 'app_logo',
+                  child: Container(
+                    width: 140,
+                    height: 140,
+                    decoration: BoxDecoration(
+                      shape: BoxShape.circle,
+                      gradient:
+                          Theme.of(context).extension<AppGradients>()?.primary,
+                      boxShadow: [
+                        BoxShadow(
+                          color: Theme.of(context)
+                              .colorScheme
+                              .primary
+                              .withOpacity(0.35),
+                          blurRadius: 28,
+                          offset: const Offset(0, 16),
+                        ),
+                      ],
+                    ),
+                    child: const Icon(
+                      Icons.gavel_rounded,
+                      size: 68,
+                      color: Colors.white,
+                    ),
+                  ),
+                ),
+                const SizedBox(height: 24),
+                Text(
+                  lang.t('auction_app'),
+                  style: Theme.of(context)
+                      .textTheme
+                      .headlineMedium
+                      ?.copyWith(fontWeight: FontWeight.w800),
+                ),
+                const SizedBox(height: 18),
+                TweenAnimationBuilder<double>(
+                  duration: const Duration(seconds: 2),
+                  tween: Tween(begin: 0, end: 1),
+                  builder: (context, value, _) {
+                    return SizedBox(
+                      width: 140,
+                      child: LinearProgressIndicator(
+                        value: value,
+                        minHeight: 6,
+                        borderRadius: BorderRadius.circular(20),
+                        valueColor: AlwaysStoppedAnimation(
+                          Theme.of(context).colorScheme.primary,
+                        ),
+                        backgroundColor:
+                            Theme.of(context).colorScheme.primary.withOpacity(0.15),
+                      ),
+                    );
+                  },
+                ),
+              ],
+            ),
           ),
         ),
       ),

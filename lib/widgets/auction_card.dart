@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
 
 import '../core/localization/language_manager.dart';
+import '../core/theme/theme_manager.dart';
 import '../models/auction_item.dart';
 import 'animated_price.dart';
 import 'glass_card.dart';
+import 'primary_button.dart';
 
 class AuctionCard extends StatelessWidget {
   const AuctionCard({
@@ -12,6 +14,7 @@ class AuctionCard extends StatelessWidget {
     required this.onBid,
     required this.lang,
     required this.onToggleFavorite,
+    required this.currencySymbol,
     super.key,
   });
 
@@ -20,28 +23,33 @@ class AuctionCard extends StatelessWidget {
   final VoidCallback onBid;
   final VoidCallback onToggleFavorite;
   final LanguageManager lang;
+  final String currencySymbol;
 
   @override
   Widget build(BuildContext context) {
     final colorScheme = Theme.of(context).colorScheme;
-    final currency = lang.locale.languageCode == 'ar' ? 'د.إ ' : 'USD ';
+    final gradients = Theme.of(context).extension<AppGradients>();
     return Hero(
       tag: item.id,
       child: GlassCard(
-        padding: const EdgeInsets.all(20),
+        onTap: onTap,
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Row(
+              crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Container(
-                  height: 54,
-                  width: 54,
-                  decoration: BoxDecoration(
-                    color: colorScheme.primary.withOpacity(0.15),
-                    borderRadius: BorderRadius.circular(18),
+                Hero(
+                  tag: '${item.id}_icon',
+                  child: Container(
+                    height: 56,
+                    width: 56,
+                    decoration: BoxDecoration(
+                      gradient: gradients?.primary,
+                      borderRadius: BorderRadius.circular(18),
+                    ),
+                    child: Icon(item.icon, size: 28, color: Colors.white),
                   ),
-                  child: Icon(item.icon, size: 28, color: colorScheme.primary),
                 ),
                 const Spacer(),
                 ValueListenableBuilder<bool>(
@@ -56,10 +64,11 @@ class AuctionCard extends StatelessWidget {
                           child: child,
                         ),
                         child: Icon(
-                          isFavorite ? Icons.favorite : Icons.favorite_border,
+                          isFavorite ? Icons.favorite_rounded : Icons.favorite_border_rounded,
                           key: ValueKey<bool>(isFavorite),
-                          color:
-                              isFavorite ? colorScheme.primary : colorScheme.onSurface.withOpacity(0.5),
+                          color: isFavorite
+                              ? colorScheme.primary
+                              : colorScheme.onSurface.withOpacity(0.45),
                         ),
                       ),
                     );
@@ -67,7 +76,7 @@ class AuctionCard extends StatelessWidget {
                 ),
               ],
             ),
-            const SizedBox(height: 16),
+            const SizedBox(height: 18),
             Text(
               item.title,
               style: Theme.of(context)
@@ -81,16 +90,20 @@ class AuctionCard extends StatelessWidget {
               style: Theme.of(context)
                   .textTheme
                   .bodyMedium
-                  ?.copyWith(color: colorScheme.onSurface.withOpacity(0.6)),
+                  ?.copyWith(color: colorScheme.onSurface.withOpacity(0.7)),
             ),
             const Spacer(),
-            AnimatedPrice(priceNotifier: item.priceNotifier, currency: currency),
-            const SizedBox(height: 12),
+            AnimatedPrice(
+              priceNotifier: item.priceNotifier,
+              currency: currencySymbol,
+            ),
+            const SizedBox(height: 14),
             SizedBox(
               width: double.infinity,
-              child: ElevatedButton(
+              child: PrimaryButton(
+                label: lang.t('place_bid'),
+                icon: Icons.gavel_rounded,
                 onPressed: onBid,
-                child: Text(lang.t('place_bid')),
               ),
             ),
             const SizedBox(height: 8),

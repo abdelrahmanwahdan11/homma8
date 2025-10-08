@@ -1,9 +1,12 @@
 import 'package:flutter/material.dart';
 
+import '../../core/app_state.dart';
 import '../../core/localization/language_manager.dart';
+import '../../core/theme/theme_manager.dart';
 import '../../models/auction_item.dart';
 import '../../widgets/animated_price.dart';
 import '../../widgets/glass_card.dart';
+import '../../widgets/gradient_background.dart';
 
 class FavoritesPage extends StatefulWidget {
   const FavoritesPage({required this.items, super.key});
@@ -44,89 +47,136 @@ class _FavoritesPageState extends State<FavoritesPage> {
   @override
   Widget build(BuildContext context) {
     final lang = LanguageManager.of(context);
-    return Scaffold(
-      appBar: AppBar(
-        title: Text(lang.t('favorites')),
-      ),
-      body: ValueListenableBuilder<int>(
-        valueListenable: _versionNotifier,
-        builder: (context, _, __) {
-          final favorites = widget.items
-              .where((item) => item.favoriteNotifier.value)
-              .toList(growable: false);
-          if (favorites.isEmpty) {
-            return Center(
-              child: Text(
-                lang.t('favorites_empty'),
-                style: Theme.of(context)
-                    .textTheme
-                    .titleMedium
-                    ?.copyWith(color: Theme.of(context).colorScheme.onSurface.withOpacity(0.6)),
-              ),
-            );
-          }
-          final currency = lang.locale.languageCode == 'ar' ? 'د.إ ' : 'USD ';
-          return GridView.builder(
-            padding: const EdgeInsets.all(24),
-            gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-              crossAxisCount: 2,
-              mainAxisSpacing: 20,
-              crossAxisSpacing: 20,
-              childAspectRatio: 0.8,
-            ),
-            itemCount: favorites.length,
-            itemBuilder: (context, index) {
-              final item = favorites[index];
-              return GlassCard(
+    final gradients = Theme.of(context).extension<AppGradients>();
+    final appState = AppState.of(context);
+    return GradientBackground(
+      child: Scaffold(
+        backgroundColor: Colors.transparent,
+        appBar: AppBar(
+          title: Text(lang.t('favorites')),
+          flexibleSpace: DecoratedBox(
+            decoration: BoxDecoration(gradient: gradients?.primary),
+          ),
+        ),
+        body: ValueListenableBuilder<int>(
+          valueListenable: _versionNotifier,
+          builder: (context, _, __) {
+            final favorites = widget.items
+                .where((item) => item.favoriteNotifier.value)
+                .toList(growable: false);
+            if (favorites.isEmpty) {
+              return Center(
                 child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
+                  mainAxisSize: MainAxisSize.min,
                   children: [
-                    Row(
-                      children: [
-                        Icon(item.icon, size: 28, color: Theme.of(context).colorScheme.primary),
-                        const Spacer(),
-                        ValueListenableBuilder<bool>(
-                          valueListenable: item.favoriteNotifier,
-                          builder: (context, isFavorite, _) {
-                            return IconButton(
-                              onPressed: item.toggleFavorite,
-                              icon: AnimatedSwitcher(
-                                duration: const Duration(milliseconds: 250),
-                                child: Icon(
-                                  isFavorite ? Icons.favorite : Icons.favorite_border,
-                                  key: ValueKey<bool>(isFavorite),
-                                  color: Theme.of(context).colorScheme.primary,
-                                ),
-                              ),
-                            );
-                          },
-                        ),
-                      ],
-                    ),
-                    const SizedBox(height: 12),
+                    Icon(Icons.favorite_border_rounded,
+                        size: 72,
+                        color: Theme.of(context)
+                            .colorScheme
+                            .onSurface
+                            .withOpacity(0.4)),
+                    const SizedBox(height: 16),
                     Text(
-                      item.title,
+                      lang.t('favorites_empty'),
                       style: Theme.of(context)
                           .textTheme
                           .titleMedium
-                          ?.copyWith(fontWeight: FontWeight.w700),
-                    ),
-                    const SizedBox(height: 8),
-                    AnimatedPrice(priceNotifier: item.priceNotifier, currency: currency),
-                    const Spacer(),
-                    Text(
-                      item.subtitle,
-                      style: Theme.of(context)
-                          .textTheme
-                          .bodyMedium
-                          ?.copyWith(color: Theme.of(context).colorScheme.onSurface.withOpacity(0.7)),
+                          ?.copyWith(fontWeight: FontWeight.w600),
                     ),
                   ],
                 ),
               );
-            },
-          );
-        },
+            }
+            return ValueListenableBuilder<String>(
+              valueListenable: appState.currencyNotifier,
+              builder: (context, symbol, _) {
+                final gridDelegate = SliverGridDelegateWithFixedCrossAxisCount(
+                  crossAxisCount: MediaQuery.of(context).size.width > 900 ? 3 : 2,
+                  mainAxisSpacing: 20,
+                  crossAxisSpacing: 20,
+                  childAspectRatio: 0.82,
+                );
+                return GridView.builder(
+                  padding: const EdgeInsets.all(24),
+                  gridDelegate: gridDelegate,
+                  itemCount: favorites.length,
+                  itemBuilder: (context, index) {
+                    final item = favorites[index];
+                    return GlassCard(
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Row(
+                            children: [
+                              Container(
+                                height: 48,
+                                width: 48,
+                                decoration: BoxDecoration(
+                                  gradient: gradients?.surface,
+                                  borderRadius: BorderRadius.circular(16),
+                                ),
+                                child: Icon(item.icon,
+                                    size: 24,
+                                    color: Theme.of(context).colorScheme.primary),
+                              ),
+                              const Spacer(),
+                              ValueListenableBuilder<bool>(
+                                valueListenable: item.favoriteNotifier,
+                                builder: (context, isFavorite, _) {
+                                  return IconButton(
+                                    onPressed: item.toggleFavorite,
+                                    icon: AnimatedSwitcher(
+                                      duration: const Duration(milliseconds: 250),
+                                      child: Icon(
+                                        isFavorite
+                                            ? Icons.favorite_rounded
+                                            : Icons.favorite_border_rounded,
+                                        key: ValueKey<bool>(isFavorite),
+                                        color: Theme.of(context)
+                                            .colorScheme
+                                            .primary,
+                                      ),
+                                    ),
+                                  );
+                                },
+                              ),
+                            ],
+                          ),
+                          const SizedBox(height: 14),
+                          Text(
+                            item.title,
+                            style: Theme.of(context)
+                                .textTheme
+                                .titleMedium
+                                ?.copyWith(fontWeight: FontWeight.w700),
+                          ),
+                          const SizedBox(height: 8),
+                          AnimatedPrice(
+                            priceNotifier: item.priceNotifier,
+                            currency: '$symbol ',
+                          ),
+                          const Spacer(),
+                          Text(
+                            item.subtitle,
+                            style: Theme.of(context)
+                                .textTheme
+                                .bodyMedium
+                                ?.copyWith(
+                                  color: Theme.of(context)
+                                      .colorScheme
+                                      .onSurface
+                                      .withOpacity(0.7),
+                                ),
+                          ),
+                        ],
+                      ),
+                    );
+                  },
+                );
+              },
+            );
+          },
+        ),
       ),
     );
   }

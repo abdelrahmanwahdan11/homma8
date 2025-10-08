@@ -2,41 +2,60 @@ import 'dart:ui';
 
 import 'package:flutter/material.dart';
 
+import '../core/theme/theme_manager.dart';
+
 class GlassCard extends StatelessWidget {
-  const GlassCard({required this.child, this.padding, super.key});
+  const GlassCard({
+    required this.child,
+    this.padding,
+    this.onTap,
+    super.key,
+  });
 
   final Widget child;
   final EdgeInsetsGeometry? padding;
+  final VoidCallback? onTap;
 
   @override
   Widget build(BuildContext context) {
+    final gradients = Theme.of(context).extension<AppGradients>();
+    final surfaceGradient = gradients?.surface;
     final colorScheme = Theme.of(context).colorScheme;
-    return ClipRRect(
-      borderRadius: BorderRadius.circular(24),
+    final card = ClipRRect(
+      borderRadius: BorderRadius.circular(28),
       child: BackdropFilter(
-        filter: ImageFilter.blur(sigmaX: 20, sigmaY: 20),
+        filter: ImageFilter.blur(sigmaX: 22, sigmaY: 22),
         child: AnimatedContainer(
-          duration: const Duration(milliseconds: 300),
+          duration: const Duration(milliseconds: 350),
           decoration: BoxDecoration(
-            color: colorScheme.surface.withOpacity(0.7),
-            borderRadius: BorderRadius.circular(24),
+            gradient: surfaceGradient,
+            borderRadius: BorderRadius.circular(28),
             border: Border.all(
-              color: colorScheme.primary.withOpacity(0.1),
+              color: colorScheme.primary.withOpacity(0.22),
               width: 1.2,
             ),
             boxShadow: [
               BoxShadow(
-                color: colorScheme.primary.withOpacity(0.12),
-                blurRadius: 24,
+                color: colorScheme.primary.withOpacity(0.18),
+                blurRadius: 30,
                 spreadRadius: 2,
-                offset: const Offset(0, 12),
+                offset: const Offset(0, 16),
               ),
             ],
           ),
-          padding: padding ?? const EdgeInsets.all(20),
+          padding: padding ?? const EdgeInsets.all(24),
           child: child,
         ),
       ),
+    );
+
+    if (onTap == null) {
+      return card;
+    }
+    return InkWell(
+      borderRadius: BorderRadius.circular(28),
+      onTap: onTap,
+      child: card,
     );
   }
 }
