@@ -1,9 +1,11 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 
+import '../../core/app_state.dart';
 import '../../core/localization/language_manager.dart';
-import '../../models/onboarding_step.dart';
-import '../../widgets/glass_card.dart';
-import '../auth/auth_page.dart';
+import '../../widgets/gradient_background.dart';
+import '../../widgets/page_indicator.dart';
 
 class OnboardingScreen extends StatefulWidget {
   const OnboardingScreen({super.key});
@@ -13,200 +15,208 @@ class OnboardingScreen extends StatefulWidget {
 }
 
 class _OnboardingScreenState extends State<OnboardingScreen> {
-  late final PageController _controller;
-  late final ValueNotifier<int> _pageNotifier;
-  late final List<OnboardingStep> _steps;
+  final PageController _pageController = PageController();
+  final List<_Slide> _slides = const [
+    _Slide('onboarding_title_1', 'onboarding_sub_1'),
+    _Slide('onboarding_title_2', 'onboarding_sub_2'),
+    _Slide('onboarding_title_3', 'onboarding_sub_3'),
+  ];
+  int _currentIndex = 0;
+  Timer? _timer;
 
   @override
   void initState() {
     super.initState();
-    _controller = PageController();
-    _pageNotifier = ValueNotifier<int>(0);
-    _steps = const [
-      OnboardingStep(
-        icon: Icons.star_rate_rounded,
-        titleKey: 'discover_items',
-        subtitleKey: 'welcome',
-      ),
-      OnboardingStep(
-        icon: Icons.lock_clock_rounded,
-        titleKey: 'secure_payments',
-        subtitleKey: 'pull_refresh',
-      ),
-      OnboardingStep(
-        icon: Icons.store_mall_directory_rounded,
-        titleKey: 'sell_anything',
-        subtitleKey: 'sell_buy',
-      ),
-    ];
+    _startAutoScroll();
+  }
+
+  void _startAutoScroll() {
+    _timer?.cancel();
+    _timer = Timer.periodic(const Duration(seconds: 3), (timer) {
+      if (_currentIndex < _slides.length - 1) {
+        _currentIndex++;
+        _pageController.animateToPage(
+          _currentIndex,
+          duration: const Duration(milliseconds: 500),
+          curve: Curves.easeInOut,
+        );
+      } else {
+        timer.cancel();
+        _complete();
+      }
+    });
+  }
+
+  void _complete() {
+    Navigator.of(context).pushReplacementNamed(AppRoutes.auth);
   }
 
   @override
   void dispose() {
-    _controller.dispose();
-    _pageNotifier.dispose();
+    _timer?.cancel();
+    _pageController.dispose();
     super.dispose();
-  }
-
-  void _goToAuth(BuildContext context) {
-    Navigator.of(context).pushReplacement(
-      MaterialPageRoute(builder: (_) => const AuthPage()),
-    );
   }
 
   @override
   Widget build(BuildContext context) {
     final lang = LanguageManager.of(context);
-    return Scaffold(
-      appBar: AppBar(
-        title: Text(lang.t('auction_app')),
+
+    return GradientBackground(
+      child: Scaffold(
         backgroundColor: Colors.transparent,
-        elevation: 0,
-        actions: [
-          TextButton(
-            onPressed: () => _goToAuth(context),
-            child: Text(lang.t('skip')),
-          ),
-        ],
-      ),
-      body: Column(
-        children: [
-          Expanded(
-            child: PageView.builder(
-              controller: _controller,
-              onPageChanged: (index) => _pageNotifier.value = index,
-              itemCount: _steps.length,
-              itemBuilder: (context, index) {
-                final step = _steps[index];
-                return Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 16),
-                  child: GlassCard(
-                    padding: const EdgeInsets.all(32),
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Hero(
-                          tag: 'onboarding_${step.titleKey}',
-                          child: Icon(
-                            step.icon,
-                            size: 96,
-                            color: Theme.of(context).colorScheme.primary,
-                          ),
-                        ),
-                        const SizedBox(height: 32),
-                        AnimatedSwitcher(
-                          duration: const Duration(milliseconds: 300),
-                          child: Text(
-                            lang.t(step.titleKey),
-                            key: ValueKey<String>(step.titleKey + lang.locale.languageCode),
-                            textAlign: TextAlign.center,
-                            style: Theme.of(context)
-                                .textTheme
-                                .headlineSmall
-                                ?.copyWith(fontWeight: FontWeight.w700),
-                          ),
-                        ),
-                        const SizedBox(height: 16),
-                        AnimatedSwitcher(
-                          duration: const Duration(milliseconds: 300),
-                          child: Text(
-                            lang.t(step.subtitleKey),
-                            key: ValueKey<String>(
-                                '${step.subtitleKey}_${lang.locale.languageCode}'),
-                            textAlign: TextAlign.center,
-                            style: Theme.of(context)
-                                .textTheme
-                                .bodyLarge
-                                ?.copyWith(color: Theme.of(context).colorScheme.onSurface.withOpacity(0.7)),
-                          ),
-                        ),
-                      ],
+        body: SafeArea(
+          child: Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 16),
+            child: Column(
+              children: [
+                Align(
+                  alignment: Alignment.centerRight,
+                  child: TextButton(
+                    onPressed: _complete,
+                    child: Text(lang.t('start_now')),
+                  ),
+                ),
+                Expanded(
+                  child: AnimatedSwitcher(
+                    duration: const Duration(milliseconds: 600),
+                    child: PageView.builder(
+                      controller: _pageController,
+                      itemCount: _slides.length,
+                      onPageChanged: (index) {
+                        setState(() {
+                          _currentIndex = index;
+                        });
+                        if (index == _slides.length - 1) {
+                          _timer?.cancel();
+                          _timer = Timer(const Duration(seconds: 3), _complete);
+                        }
+                      },
+                      itemBuilder: (context, index) {
+                        final slide = _slides[index];
+                        return AnimatedBuilder(
+                          animation: _pageController,
+                          builder: (context, child) {
+                            double value = 1;
+                            if (_pageController.position.haveDimensions) {
+                              value = (_pageController.page ?? 0) - index;
+                              value = (1 - (value.abs() * 0.2)).clamp(0.8, 1.0);
+                            }
+                            return Transform.scale(
+                              scale: value,
+                              child: child,
+                            );
+                          },
+                          child: _OnboardingSlide(slide: slide),
+                        );
+                      },
                     ),
                   ),
-                );
-              },
+                ),
+                const SizedBox(height: 16),
+                PageIndicator(length: _slides.length, currentIndex: _currentIndex),
+                const SizedBox(height: 24),
+                ElevatedButton(
+                  onPressed: () {
+                    _timer?.cancel();
+                    if (_currentIndex < _slides.length - 1) {
+                      _pageController.nextPage(
+                        duration: const Duration(milliseconds: 500),
+                        curve: Curves.easeInOut,
+                      );
+                    } else {
+                      _complete();
+                    }
+                  },
+                  child: Text(
+                    _currentIndex == _slides.length - 1
+                        ? lang.t('start_now')
+                        : lang.t('next'),
+                  ),
+                ),
+              ],
             ),
           ),
-          const SizedBox(height: 24),
-          ValueListenableBuilder<int>(
-            valueListenable: _pageNotifier,
-            builder: (context, index, _) {
-              return Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: List.generate(_steps.length, (i) {
-                  final isActive = i == index;
-                  return AnimatedContainer(
-                    duration: const Duration(milliseconds: 250),
-                    margin: const EdgeInsets.symmetric(horizontal: 6),
-                    height: 10,
-                    width: isActive ? 28 : 12,
-                    decoration: BoxDecoration(
-                      color: isActive
-                          ? Theme.of(context).colorScheme.primary
-                          : Theme.of(context).colorScheme.primary.withOpacity(0.3),
-                      borderRadius: BorderRadius.circular(12),
-                    ),
-                  );
-                }),
-              );
-            },
-          ),
-          const SizedBox(height: 24),
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 16),
-            child: ValueListenableBuilder<int>(
-              valueListenable: _pageNotifier,
-              builder: (context, index, _) {
-                final isLast = index == _steps.length - 1;
-                return Row(
-                  children: [
-                    Expanded(
-                      child: OutlinedButton(
-                        onPressed: () {
-                          if (index > 0) {
-                            _controller.previousPage(
-                              duration: const Duration(milliseconds: 400),
-                              curve: Curves.easeInOut,
-                            );
-                          }
-                        },
-                        child: AnimatedSwitcher(
-                          duration: const Duration(milliseconds: 300),
-                          child: index == 0
-                              ? const SizedBox.shrink()
-                              : Text(lang.t('back')),
-                        ),
-                      ),
-                    ),
-                    const SizedBox(width: 16),
-                    Expanded(
-                      child: ElevatedButton(
-                        onPressed: () {
-                          if (isLast) {
-                            _goToAuth(context);
-                          } else {
-                            _controller.nextPage(
-                              duration: const Duration(milliseconds: 400),
-                              curve: Curves.easeInOut,
-                            );
-                          }
-                        },
-                        child: AnimatedSwitcher(
-                          duration: const Duration(milliseconds: 300),
-                          child: Text(
-                            lang.t(isLast ? 'get_started' : 'next'),
-                            key: ValueKey<String>('btn_${isLast}_${lang.locale.languageCode}'),
-                          ),
-                        ),
-                      ),
-                    ),
-                  ],
-                );
-              },
-            ),
-          ),
-        ],
+        ),
       ),
     );
   }
+}
+
+class _OnboardingSlide extends StatelessWidget {
+  const _OnboardingSlide({required this.slide});
+
+  final _Slide slide;
+
+  @override
+  Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    final lang = LanguageManager.of(context);
+
+    return Column(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+        Hero(
+          tag: 'app_logo',
+          child: Container(
+            width: 140,
+            height: 140,
+            decoration: BoxDecoration(
+              shape: BoxShape.circle,
+              gradient: LinearGradient(
+                colors: [
+                  theme.colorScheme.primary,
+                  theme.colorScheme.primary.withOpacity(0.6),
+                ],
+              ),
+              boxShadow: [
+                BoxShadow(
+                  color: theme.colorScheme.primary.withOpacity(0.2),
+                  blurRadius: 24,
+                  spreadRadius: 4,
+                ),
+              ],
+            ),
+            child: Center(
+              child: Text(
+                'SB',
+                style: theme.textTheme.displayLarge?.copyWith(
+                  color: theme.colorScheme.onPrimary,
+                ),
+              ),
+            ),
+          ),
+        ),
+        const SizedBox(height: 48),
+        AnimatedSwitcher(
+          duration: const Duration(milliseconds: 500),
+          child: Text(
+            lang.t(slide.titleKey),
+            key: ValueKey(slide.titleKey),
+            textAlign: TextAlign.center,
+            style: theme.textTheme.displayLarge,
+          ),
+        ),
+        const SizedBox(height: 16),
+        AnimatedOpacity(
+          opacity: 1,
+          duration: const Duration(milliseconds: 500),
+          child: Text(
+            lang.t(slide.subtitleKey),
+            textAlign: TextAlign.center,
+            style: theme.textTheme.bodyMedium?.copyWith(
+              color: theme.colorScheme.onBackground.withOpacity(0.7),
+            ),
+          ),
+        ),
+      ],
+    );
+  }
+}
+
+class _Slide {
+  const _Slide(this.titleKey, this.subtitleKey);
+
+  final String titleKey;
+  final String subtitleKey;
 }

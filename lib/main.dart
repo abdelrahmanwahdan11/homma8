@@ -3,62 +3,88 @@ import 'package:flutter_localizations/flutter_localizations.dart';
 
 import 'core/app_state.dart';
 import 'core/localization/language_manager.dart';
+import 'core/routes/app_router.dart';
 import 'core/theme/theme_manager.dart';
-import 'screens/splash_screen.dart';
+import 'services/shared_prefs_service.dart';
 
-void main() {
-  runApp(const AuctionApp());
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  final prefs = await SharedPrefsService.getInstance();
+  runApp(SouqBidApp(prefs: prefs));
 }
 
-class AuctionApp extends StatelessWidget {
-  const AuctionApp({super.key});
+class SouqBidApp extends StatelessWidget {
+  const SouqBidApp({required this.prefs, super.key});
+
+  final SharedPrefsService prefs;
 
   @override
   Widget build(BuildContext context) {
     return AppState(
-      child: Builder(
-        builder: (context) {
-          final state = AppState.of(context);
-          return ValueListenableBuilder<ThemeMode>(
-            valueListenable: state.themeNotifier,
-            builder: (context, mode, _) {
-              return ValueListenableBuilder<Locale>(
-                valueListenable: state.localeNotifier,
-                builder: (context, locale, __) {
-                  return MaterialApp(
-                    debugShowCheckedModeBanner: false,
-                    theme: ThemeManager.lightTheme,
-                    darkTheme: ThemeManager.darkTheme,
-                    themeMode: mode,
-                    locale: locale,
-                    supportedLocales: const [
-                      Locale('en'),
-                      Locale('ar'),
-                    ],
-                    localizationsDelegates: const [
-                      GlobalMaterialLocalizations.delegate,
-                      GlobalWidgetsLocalizations.delegate,
-                      GlobalCupertinoLocalizations.delegate,
-                    ],
-                    builder: (context, child) {
-                      final lang = LanguageManager.of(context);
-                      return Directionality(
-                        textDirection: lang.locale.languageCode == 'ar'
-                            ? TextDirection.rtl
-                            : TextDirection.ltr,
-                        child: child ?? const SizedBox.shrink(),
-                      );
-                    },
-                    onGenerateTitle: (context) =>
-                        LanguageManager.of(context).t('auction_app'),
-                    home: const SplashScreen(),
-                  );
-                },
+      prefs: prefs,
+      child: const _AppView(),
+    );
+  }
+}
+
+class _AppView extends StatelessWidget {
+  const _AppView();
+
+  String _resolveInitialRoute(dynamic scope) {
+    final session = scope.sessionNotifier.value;
+    final stored = scope.lastRouteNotifier.value;
+    if (session == null) {
+      return AppRoutes.onboarding;
+    }
+    if (stored == AppRoutes.onboarding || stored == AppRoutes.auth) {
+      return AppRoutes.home;
+    }
+    return stored;
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final scope = AppState.of(context);
+    return ValueListenableBuilder<ThemeMode>(
+      valueListenable: scope.themeNotifier,
+      builder: (context, mode, _) {
+        return LanguageManager(
+          notifier: scope.localeNotifier,
+          child: MaterialApp(
+            debugShowCheckedModeBanner: false,
+            title: 'SouqBid',
+            theme: ThemeManager.buildLightTheme(),
+            darkTheme: ThemeManager.buildDarkTheme(),
+            themeMode: mode,
+            locale: scope.localeNotifier.value,
+            supportedLocales: const [
+              Locale('ar'),
+              Locale('en'),
+            ],
+            localizationsDelegates: const [
+              GlobalMaterialLocalizations.delegate,
+              GlobalWidgetsLocalizations.delegate,
+              GlobalCupertinoLocalizations.delegate,
+            ],
+            onGenerateRoute: AppRouter.onGenerateRoute,
+            navigatorObservers: [RouteTracker(scope.setLastRoute)],
+            builder: (context, child) {
+              final lang = LanguageManager.of(context);
+              final media = MediaQuery.of(context);
+              return MediaQuery(
+                data: media.copyWith(
+                  textScaler: const TextScaler.linear(1),
+                ),
+                child: Directionality(
+                  textDirection: lang.direction,
+                  child: child ?? const SizedBox.shrink(),
+                ),
               );
             },
-          );
-        },
-      ),
+            initialRoute: _resolveInitialRoute(scope),
+          ),
+        );
+      },
     );
   }
 }
