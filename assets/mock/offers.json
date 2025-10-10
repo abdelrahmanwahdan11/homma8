@@ -1,0 +1,28 @@
+[
+  {
+    "id": "o1",
+    "title": "Gradient Glass Vase Set",
+    "images": [
+      "https://picsum.photos/seed/vase1/800/600"
+    ],
+    "priceCurrent": 120.0,
+    "endTime": "2025-12-27T09:00:00.000Z",
+    "seller": "Glass Atelier",
+    "bidsCount": 4,
+    "discount": 35,
+    "tags": ["decor", "limited"]
+  },
+  {
+    "id": "o2",
+    "title": "Ink Gradient Smart Watch",
+    "images": [
+      "https://picsum.photos/seed/watch1/800/600"
+    ],
+    "priceCurrent": 280.0,
+    "endTime": "2025-12-31T11:45:00.000Z",
+    "seller": "SouqBid Labs",
+    "bidsCount": 7,
+    "discount": 28,
+    "tags": ["tech", "wearable"]
+  }
+]

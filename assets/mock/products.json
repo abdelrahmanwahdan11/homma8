@@ -1,0 +1,58 @@
+[
+  {
+    "id": "p1",
+    "title": "Liquid Glass Desk Lamp",
+    "images": [
+      "https://picsum.photos/seed/lamp1/800/600",
+      "https://picsum.photos/seed/lamp2/800/600"
+    ],
+    "priceCurrent": 320.0,
+    "endTime": "2025-12-30T18:00:00.000Z",
+    "seller": "Studio Armon",
+    "bidsCount": 8,
+    "discount": 12,
+    "tags": ["lighting", "limited"]
+  },
+  {
+    "id": "p2",
+    "title": "Grey Degree Lounge Chair",
+    "images": [
+      "https://picsum.photos/seed/chair1/800/600",
+      "https://picsum.photos/seed/chair2/800/600"
+    ],
+    "priceCurrent": 540.0,
+    "endTime": "2025-12-29T12:00:00.000Z",
+    "seller": "SouqBid Labs",
+    "bidsCount": 12,
+    "discount": 22,
+    "tags": ["furniture", "premium"]
+  },
+  {
+    "id": "p3",
+    "title": "Aurora Ink Wall Art",
+    "images": [
+      "https://picsum.photos/seed/art1/800/600",
+      "https://picsum.photos/seed/art2/800/600"
+    ],
+    "priceCurrent": 210.0,
+    "endTime": "2025-12-28T08:30:00.000Z",
+    "seller": "Gallery Nine",
+    "bidsCount": 5,
+    "discount": 18,
+    "tags": ["art", "decor"]
+  },
+  {
+    "id": "p4",
+    "title": "Inkstone Smart Speaker",
+    "images": [
+      "https://picsum.photos/seed/speaker1/800/600",
+      "https://picsum.photos/seed/speaker2/800/600"
+    ],
+    "priceCurrent": 460.0,
+    "endTime": "2025-12-31T22:15:00.000Z",
+    "seller": "Grey Degree Labs",
+    "bidsCount": 9,
+    "discount": 15,
+    "tags": ["tech", "audio"]
+  }
+]

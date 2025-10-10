@@ -1,0 +1,11 @@
+{
+  "id": "user_001",
+  "name": "Lina Al Saif",
+  "email": "lina@souqbid.app",
+  "avatar": "https://picsum.photos/seed/lina/200/200",
+  "rating": 4.8,
+  "achievements": [
+    "Top Bidder of the Day",
+    "Early Trend Seeker"
+  ]
+}

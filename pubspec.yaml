@@ -1,5 +1,5 @@
-name: auction_app_pure
-description: Pure Flutter auction app using only google_fonts.
+name: souqbid
+description: SouqBid prototype app built with pure Flutter, google_fonts, and shared_preferences.
 publish_to: 'none'
 version: 1.0.0+1
 
@@ -11,6 +11,7 @@ dependencies:
   flutter:
     sdk: flutter
   google_fonts: ^6.2.1
+  shared_preferences: ^2.2.3
 
 dev_dependencies:
   flutter_test:
@@ -19,3 +20,6 @@ dev_dependencies:
 
 flutter:
   uses-material-design: true
+  assets:
+    - assets/mock/
+    - assets/i18n/

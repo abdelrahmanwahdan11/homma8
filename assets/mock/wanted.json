@@ -1,0 +1,18 @@
+[
+  {
+    "id": "w1",
+    "title": "Vintage Liquid Glass Table",
+    "targetPrice": 650.0,
+    "description": "Looking for a round glass table with matte grey base.",
+    "city": "Dubai",
+    "expiresAt": "2026-01-15T00:00:00.000Z"
+  },
+  {
+    "id": "w2",
+    "title": "Ink Gradient Drone",
+    "targetPrice": 420.0,
+    "description": "Need a drone with 4K camera and smooth stabilization.",
+    "city": "Riyadh",
+    "expiresAt": "2026-01-05T00:00:00.000Z"
+  }
+]
