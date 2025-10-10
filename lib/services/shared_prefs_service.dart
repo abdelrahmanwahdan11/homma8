@@ -104,4 +104,54 @@ class SharedPrefsService {
 
   Future<void> setLastRoute(String route) =>
       _prefs.setString('last_route', route);
+
+  List<Product> getCachedProducts() {
+    final raw = _prefs.getString('cached_products');
+    if (raw == null || raw.isEmpty) return const <Product>[];
+    return decodeProducts(raw);
+  }
+
+  Future<void> setCachedProducts(List<Product> products) {
+    if (products.isEmpty) {
+      return _prefs.remove('cached_products');
+    }
+    return _prefs.setString('cached_products', encodeProducts(products));
+  }
+
+  List<Product> getCachedOffers() {
+    final raw = _prefs.getString('cached_offers');
+    if (raw == null || raw.isEmpty) return const <Product>[];
+    return decodeProducts(raw);
+  }
+
+  Future<void> setCachedOffers(List<Product> products) {
+    if (products.isEmpty) {
+      return _prefs.remove('cached_offers');
+    }
+    return _prefs.setString('cached_offers', encodeProducts(products));
+  }
+
+  AnalyticsSummary getAnalyticsSummary() {
+    final raw = _prefs.getString('analytics_local');
+    if (raw == null || raw.isEmpty) {
+      return const AnalyticsSummary();
+    }
+    final data = jsonDecode(raw) as Map<String, dynamic>;
+    return AnalyticsSummary.fromJson(data);
+  }
+
+  Future<void> setAnalyticsSummary(AnalyticsSummary summary) =>
+      _prefs.setString('analytics_local', jsonEncode(summary.toJson()));
+
+  List<String> getSearchHistory() =>
+      _prefs.getStringList('search_history') ?? <String>[];
+
+  Future<void> setSearchHistory(List<String> history) =>
+      _prefs.setStringList('search_history', history);
+
+  bool getThemeAnimationEnabled() =>
+      _prefs.getBool('theme_animation_enabled') ?? true;
+
+  Future<void> setThemeAnimationEnabled(bool value) =>
+      _prefs.setBool('theme_animation_enabled', value);
 }

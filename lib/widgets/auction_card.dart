@@ -12,11 +12,15 @@ class AuctionCard extends StatelessWidget {
   const AuctionCard({
     required this.product,
     required this.onTap,
+    this.onLongPress,
+    this.aiHint,
     super.key,
   });
 
   final Product product;
   final VoidCallback onTap;
+  final VoidCallback? onLongPress;
+  final String? aiHint;
 
   @override
   Widget build(BuildContext context) {
@@ -32,6 +36,7 @@ class AuctionCard extends StatelessWidget {
         child: InkWell(
           borderRadius: BorderRadius.circular(20),
           onTap: onTap,
+          onLongPress: onLongPress,
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
@@ -161,7 +166,7 @@ class AuctionCard extends StatelessWidget {
                         vertical: 6,
                       ),
                       child: Text(
-                        lang.t('ai_chips'),
+                        aiHint ?? lang.t('ai_chips'),
                         style: theme.textTheme.bodySmall?.copyWith(
                           color: theme.colorScheme.primary,
                           fontWeight: FontWeight.w600,

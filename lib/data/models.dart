@@ -178,3 +178,102 @@ List<Product> decodeProducts(String source) {
   final data = jsonDecode(source) as List<dynamic>;
   return data.map((item) => ProductEncoding.fromJson(item as Map<String, dynamic>)).toList();
 }
+
+class AnalyticsSummary {
+  const AnalyticsSummary({
+    this.pageViews = const <String, int>{},
+    this.secondsPerPage = const <String, int>{},
+    this.bidsPlaced = 0,
+    this.totalBidAmount = 0,
+    this.favoriteToggles = 0,
+    this.wantedCreated = 0,
+    this.languageSwitches = 0,
+  });
+
+  final Map<String, int> pageViews;
+  final Map<String, int> secondsPerPage;
+  final int bidsPlaced;
+  final double totalBidAmount;
+  final int favoriteToggles;
+  final int wantedCreated;
+  final int languageSwitches;
+
+  factory AnalyticsSummary.fromJson(Map<String, dynamic> json) {
+    return AnalyticsSummary(
+      pageViews: (json['pageViews'] as Map<String, dynamic>? ?? const {})
+          .map((key, value) => MapEntry(key, (value as num).toInt())),
+      secondsPerPage: (json['secondsPerPage'] as Map<String, dynamic>? ?? const {})
+          .map((key, value) => MapEntry(key, (value as num).toInt())),
+      bidsPlaced: (json['bidsPlaced'] as num?)?.toInt() ?? 0,
+      totalBidAmount: (json['totalBidAmount'] as num?)?.toDouble() ?? 0,
+      favoriteToggles: (json['favoriteToggles'] as num?)?.toInt() ?? 0,
+      wantedCreated: (json['wantedCreated'] as num?)?.toInt() ?? 0,
+      languageSwitches: (json['languageSwitches'] as num?)?.toInt() ?? 0,
+    );
+  }
+
+  Map<String, dynamic> toJson() => {
+        'pageViews': pageViews,
+        'secondsPerPage': secondsPerPage,
+        'bidsPlaced': bidsPlaced,
+        'totalBidAmount': totalBidAmount,
+        'favoriteToggles': favoriteToggles,
+        'wantedCreated': wantedCreated,
+        'languageSwitches': languageSwitches,
+      };
+
+  AnalyticsSummary copyWith({
+    Map<String, int>? pageViews,
+    Map<String, int>? secondsPerPage,
+    int? bidsPlaced,
+    double? totalBidAmount,
+    int? favoriteToggles,
+    int? wantedCreated,
+    int? languageSwitches,
+  }) {
+    return AnalyticsSummary(
+      pageViews: pageViews ?? this.pageViews,
+      secondsPerPage: secondsPerPage ?? this.secondsPerPage,
+      bidsPlaced: bidsPlaced ?? this.bidsPlaced,
+      totalBidAmount: totalBidAmount ?? this.totalBidAmount,
+      favoriteToggles: favoriteToggles ?? this.favoriteToggles,
+      wantedCreated: wantedCreated ?? this.wantedCreated,
+      languageSwitches: languageSwitches ?? this.languageSwitches,
+    );
+  }
+
+  AnalyticsSummary recordPageView(String pageId) {
+    final views = Map<String, int>.from(pageViews);
+    views[pageId] = (views[pageId] ?? 0) + 1;
+    return copyWith(pageViews: views);
+  }
+
+  AnalyticsSummary recordTimeSpent({required String pageId, required Duration duration}) {
+    final seconds = duration.inSeconds;
+    if (seconds <= 0) {
+      return this;
+    }
+    final map = Map<String, int>.from(secondsPerPage);
+    map[pageId] = (map[pageId] ?? 0) + seconds;
+    return copyWith(secondsPerPage: map);
+  }
+
+  AnalyticsSummary recordBid({required String productId, required double amount}) {
+    return copyWith(
+      bidsPlaced: bidsPlaced + 1,
+      totalBidAmount: totalBidAmount + amount,
+    );
+  }
+
+  AnalyticsSummary recordFavorite(String productId) {
+    return copyWith(favoriteToggles: favoriteToggles + 1);
+  }
+
+  AnalyticsSummary recordWanted() {
+    return copyWith(wantedCreated: wantedCreated + 1);
+  }
+
+  AnalyticsSummary recordLanguageSwitch() {
+    return copyWith(languageSwitches: languageSwitches + 1);
+  }
+}

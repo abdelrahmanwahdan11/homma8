@@ -5,11 +5,15 @@ import 'core/app_state.dart';
 import 'core/localization/language_manager.dart';
 import 'core/routes/app_router.dart';
 import 'core/theme/theme_manager.dart';
+import 'services/analytics_service.dart';
+import 'services/mock_api_service.dart';
 import 'services/shared_prefs_service.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   final prefs = await SharedPrefsService.getInstance();
+  MockApiService.configure(prefs);
+  AnalyticsService.configure(prefs);
   runApp(SouqBidApp(prefs: prefs));
 }
 

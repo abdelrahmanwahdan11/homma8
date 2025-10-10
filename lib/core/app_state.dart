@@ -4,6 +4,7 @@ import 'dart:collection';
 import 'package:flutter/material.dart';
 
 import '../data/models.dart';
+import '../services/analytics_service.dart';
 import '../services/shared_prefs_service.dart';
 
 class AppState extends StatefulWidget {
@@ -32,6 +33,9 @@ class _AppStateState extends State<AppState> {
   late final ValueNotifier<String> _homeFilterNotifier;
   late final ValueNotifier<double> _homeScrollOffsetNotifier;
   late final ValueNotifier<String> _lastRouteNotifier;
+  late final ValueNotifier<List<String>> _searchHistoryNotifier;
+  late final ValueNotifier<bool> _themeAnimationNotifier;
+  late final AnalyticsService _analyticsService;
 
   bool _initialized = false;
 
@@ -39,6 +43,7 @@ class _AppStateState extends State<AppState> {
   void initState() {
     super.initState();
     final prefs = widget.prefs;
+    _analyticsService = AnalyticsService.instance;
     _themeNotifier = ValueNotifier(prefs.getThemeMode());
     _localeNotifier = ValueNotifier(prefs.getLocale());
     _sessionNotifier = ValueNotifier<UserSession?>(prefs.getSession());
@@ -48,6 +53,8 @@ class _AppStateState extends State<AppState> {
     _homeFilterNotifier = ValueNotifier(prefs.getHomeFilter());
     _homeScrollOffsetNotifier = ValueNotifier(prefs.getHomeScrollOffset());
     _lastRouteNotifier = ValueNotifier(prefs.getLastRoute());
+    _searchHistoryNotifier = ValueNotifier(prefs.getSearchHistory());
+    _themeAnimationNotifier = ValueNotifier(prefs.getThemeAnimationEnabled());
     _initialized = true;
   }
 
@@ -62,6 +69,8 @@ class _AppStateState extends State<AppState> {
     _homeFilterNotifier.dispose();
     _homeScrollOffsetNotifier.dispose();
     _lastRouteNotifier.dispose();
+    _searchHistoryNotifier.dispose();
+    _themeAnimationNotifier.dispose();
     super.dispose();
   }
 
@@ -95,6 +104,7 @@ class _AppStateState extends State<AppState> {
     if (_localeNotifier.value == locale) return;
     _localeNotifier.value = locale;
     widget.prefs.setLocale(locale);
+    unawaited(_analyticsService.trackLanguageSwitch());
   }
 
   void setSession(UserSession? session) {
@@ -111,6 +121,8 @@ class _AppStateState extends State<AppState> {
     }
     _favoritesNotifier.value = favorites;
     widget.prefs.setFavorites(favorites);
+    unawaited(
+        _analyticsService.trackFavoriteToggle(productId: productId));
   }
 
   bool isFavorite(String productId) => _favoritesNotifier.value.contains(productId);
@@ -119,6 +131,7 @@ class _AppStateState extends State<AppState> {
     final updated = [..._wantedNotifier.value, request];
     _wantedNotifier.value = updated;
     widget.prefs.setWantedRequests(updated);
+    unawaited(_analyticsService.trackWantedCreated());
   }
 
   void removeWantedRequest(String id) {
@@ -145,6 +158,30 @@ class _AppStateState extends State<AppState> {
   void setLastRoute(String route) {
     _lastRouteNotifier.value = route;
     widget.prefs.setLastRoute(route);
+  }
+
+  void addSearchQuery(String query) {
+    final trimmed = query.trim();
+    if (trimmed.isEmpty) return;
+    final history = [..._searchHistoryNotifier.value];
+    history.remove(trimmed);
+    history.insert(0, trimmed);
+    if (history.length > 8) {
+      history.removeRange(8, history.length);
+    }
+    _searchHistoryNotifier.value = history;
+    widget.prefs.setSearchHistory(history);
+  }
+
+  void clearSearchHistory() {
+    _searchHistoryNotifier.value = const [];
+    widget.prefs.setSearchHistory(const []);
+  }
+
+  void setThemeAnimationEnabled(bool value) {
+    if (_themeAnimationNotifier.value == value) return;
+    _themeAnimationNotifier.value = value;
+    widget.prefs.setThemeAnimationEnabled(value);
   }
 
   @override
@@ -176,6 +213,14 @@ class _AppStateScope extends InheritedWidget {
 
   ValueNotifier<String> get lastRouteNotifier => state._lastRouteNotifier;
 
+  ValueNotifier<List<String>> get searchHistoryNotifier =>
+      state._searchHistoryNotifier;
+
+  ValueNotifier<bool> get themeAnimationNotifier =>
+      state._themeAnimationNotifier;
+
+  AnalyticsService get analytics => state._analyticsService;
+
   bool get initialized => state.initialized;
 
   void setThemeMode(ThemeMode mode) => state.setThemeMode(mode);
@@ -199,6 +244,13 @@ class _AppStateScope extends InheritedWidget {
   void setHomeScrollOffset(double offset) => state.setHomeScrollOffset(offset);
 
   void setLastRoute(String route) => state.setLastRoute(route);
+
+  void addSearchQuery(String query) => state.addSearchQuery(query);
+
+  void clearSearchHistory() => state.clearSearchHistory();
+
+  void setThemeAnimationEnabled(bool value) =>
+      state.setThemeAnimationEnabled(value);
 
   SharedPrefsService get prefs => state.widget.prefs;
 
