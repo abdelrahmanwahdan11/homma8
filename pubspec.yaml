@@ -1,5 +1,5 @@
-name: swipebid
-description: Tinder-like marketplace with auctions and demand discounts
+name: mazzzad
+description: مزااد ذكي + مصادقة/إعدادات + شاشة قريباً (AR/EN) بدون حزم خارجية سوى google_fonts و shared_preferences.
 publish_to: 'none'
 version: 0.1.0+1
 
@@ -10,9 +10,10 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
-  google_fonts: ^6.2.1
   flutter_localizations:
     sdk: flutter
+  google_fonts: ^6.2.1
+  shared_preferences: ^2.2.3
 
 dev_dependencies:
   flutter_test:
@@ -21,3 +22,12 @@ dev_dependencies:
 
 flutter:
   uses-material-design: true
+  generate: true
+  gen-l10n:
+    arb-dir: lib/l10n
+    template-arb-file: app_en.arb
+    output-localization-file: app_localizations.dart
+    output-class: AppLocalizations
+    preferred-supported-locales:
+      - ar
+      - en
