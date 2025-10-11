@@ -1,90 +1,68 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_localizations/flutter_localizations.dart';
 
-import 'core/app_state.dart';
-import 'core/localization/language_manager.dart';
-import 'core/routes/app_router.dart';
-import 'core/theme/theme_manager.dart';
-import 'services/shared_prefs_service.dart';
+import 'app/app.dart';
+import 'application/engines/pricing_engine.dart';
+import 'application/engines/suggestion_engine.dart';
+import 'application/stores.dart';
+import 'application/usecases/create_sell_listing.dart';
+import 'application/usecases/create_wanted_item.dart';
+import 'application/usecases/fetch_products_page.dart';
+import 'application/usecases/place_bid.dart';
+import 'application/usecases/recompute_discounts.dart';
+import 'application/usecases/register_price_alert.dart';
+import 'application/usecases/skip_left.dart';
+import 'application/usecases/swipe_right_add_demand.dart';
+import 'data/mock/mock_sources.dart';
 
-void main() async {
+void main() {
   WidgetsFlutterBinding.ensureInitialized();
-  final prefs = await SharedPrefsService.getInstance();
-  runApp(SouqBidApp(prefs: prefs));
-}
 
-class SouqBidApp extends StatelessWidget {
-  const SouqBidApp({required this.prefs, super.key});
+  final appStore = AppStore();
+  final catalogStore = CatalogStore();
+  final auctionStore = AuctionStore();
+  final userStore = UserStore();
 
-  final SharedPrefsService prefs;
+  final pricingEngine = PricingEngine();
+  final suggestionEngine = SuggestionEngine();
 
-  @override
-  Widget build(BuildContext context) {
-    return AppState(
-      prefs: prefs,
-      child: const _AppView(),
-    );
-  }
-}
+  final productRepository = MockProductRepository(pricingEngine);
+  final userRepository = MockUserRepository(productRepository);
+  final sellRepository = MockSellRepository(userRepository);
 
-class _AppView extends StatelessWidget {
-  const _AppView();
+  final fetchProducts = FetchProductsPage(productRepository, catalogStore);
+  final swipeRight = SwipeRightAddDemandAndWatch(
+    catalogStore: catalogStore,
+    userStore: userStore,
+    userRepository: userRepository,
+    pricingEngine: pricingEngine,
+    productRepository: productRepository,
+  );
+  final skipLeft = SkipLeft(catalogStore);
+  final placeBid = PlaceBid(repository: productRepository, auctionStore: auctionStore);
+  final createSellListing = CreateSellListing(sellRepository);
+  final createWantedItem = CreateWantedItem(repository: sellRepository, userStore: userStore);
+  final registerAlert = RegisterPriceAlert(userStore);
+  final recomputeDiscounts = RecomputeDiscountsForDemand(pricingEngine, catalogStore);
 
-  String _resolveInitialRoute(dynamic scope) {
-    final session = scope.sessionNotifier.value;
-    final stored = scope.lastRouteNotifier.value;
-    if (session == null) {
-      return AppRoutes.onboarding;
-    }
-    if (stored == AppRoutes.onboarding || stored == AppRoutes.auth) {
-      return AppRoutes.home;
-    }
-    return stored;
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    final scope = AppState.of(context);
-    return ValueListenableBuilder<ThemeMode>(
-      valueListenable: scope.themeNotifier,
-      builder: (context, mode, _) {
-        return LanguageManager(
-          notifier: scope.localeNotifier,
-          child: MaterialApp(
-            debugShowCheckedModeBanner: false,
-            title: 'SouqBid',
-            theme: ThemeManager.buildLightTheme(),
-            darkTheme: ThemeManager.buildDarkTheme(),
-            themeMode: mode,
-            locale: scope.localeNotifier.value,
-            supportedLocales: const [
-              Locale('ar'),
-              Locale('en'),
-            ],
-            localizationsDelegates: const [
-              GlobalMaterialLocalizations.delegate,
-              GlobalWidgetsLocalizations.delegate,
-              GlobalCupertinoLocalizations.delegate,
-            ],
-            onGenerateRoute: AppRouter.onGenerateRoute,
-            navigatorObservers: [RouteTracker(scope.setLastRoute)],
-            builder: (context, child) {
-              final lang = LanguageManager.of(context);
-              final media = MediaQuery.of(context);
-              return MediaQuery(
-                data: media.copyWith(
-                  textScaler: const TextScaler.linear(1),
-                ),
-                child: Directionality(
-                  textDirection: lang.direction,
-                  child: child ?? const SizedBox.shrink(),
-                ),
-              );
-            },
-            initialRoute: _resolveInitialRoute(scope),
-          ),
-        );
-      },
-    );
-  }
+  runApp(
+    AppScope(
+      appStore: appStore,
+      catalogStore: catalogStore,
+      auctionStore: auctionStore,
+      userStore: userStore,
+      productRepository: productRepository,
+      userRepository: userRepository,
+      sellRepository: sellRepository,
+      fetchProducts: fetchProducts,
+      swipeRight: swipeRight,
+      skipLeft: skipLeft,
+      placeBid: placeBid,
+      createSellListing: createSellListing,
+      createWantedItem: createWantedItem,
+      registerPriceAlert: registerAlert,
+      recomputeDiscounts: recomputeDiscounts,
+      suggestionEngine: suggestionEngine,
+      child: const SwipeBidApp(),
+    ),
+  );
 }
