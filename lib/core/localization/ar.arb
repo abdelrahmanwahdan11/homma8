@@ -1,0 +1,23 @@
+{
+  "@@locale": "ar",
+  "app_title": "بازار إكس",
+  "login": "تسجيل الدخول",
+  "signup": "إنشاء حساب",
+  "continue_as_guest": "الدخول كضيف",
+  "home": "الرئيسية",
+  "explore": "استكشاف",
+  "create": "إنشاء",
+  "matches": "التوفيق",
+  "favorites": "المفضلة",
+  "profile": "الحساب",
+  "search": "ابحث في المزادات والطلبات",
+  "filters": "فلاتر",
+  "place_bid": "قدّم مزايدة",
+  "add_wanted": "أضف طلب شراء",
+  "ai_info": "معلومات بالذكاء",
+  "dark_mode": "الوضع الداكن",
+  "language": "اللغة",
+  "tab_for_you": "مقترحات لك",
+  "tab_auctions": "مزادات",
+  "tab_wanted": "طلبات شراء"
+}

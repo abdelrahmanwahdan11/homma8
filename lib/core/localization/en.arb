@@ -1,0 +1,23 @@
+{
+  "@@locale": "en",
+  "app_title": "BazaarX",
+  "login": "Log in",
+  "signup": "Sign up",
+  "continue_as_guest": "Continue as guest",
+  "home": "Home",
+  "explore": "Explore",
+  "create": "Create",
+  "matches": "Matches",
+  "favorites": "Favorites",
+  "profile": "Profile",
+  "search": "Search auctions & wanted",
+  "filters": "Filters",
+  "place_bid": "Place bid",
+  "add_wanted": "Add wanted",
+  "ai_info": "AI info",
+  "dark_mode": "Dark mode",
+  "language": "Language",
+  "tab_for_you": "For you",
+  "tab_auctions": "Auctions",
+  "tab_wanted": "Wanted"
+}
