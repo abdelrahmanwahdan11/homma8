@@ -1,5 +1,5 @@
-name: bentobid
-description: BentoBid — Swipe Auctions with local personalization, AR/EN support, and offline-first data.
+name: bazaarx
+description: Dual-sided auction & wanted marketplace (pre-backend)
 publish_to: 'none'
 version: 0.1.0+1
 
@@ -23,11 +23,5 @@ dev_dependencies:
 flutter:
   uses-material-design: true
   generate: true
-  gen-l10n:
-    arb-dir: lib/l10n
-    template-arb-file: app_en.arb
-    output-localization-file: app_localizations.dart
-    output-class: AppLocalizations
-    preferred-supported-locales:
-      - ar
-      - en
+  assets:
+    - assets/mock/

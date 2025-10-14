@@ -1,57 +1,256 @@
 {
   "@@locale": "ar",
-  "appTitle": "BentoBid — مزادات ذكية",
-  "swipeToExplore": "اسحب للاستكشاف",
-  "createListing": "إنشاء عرض بيع",
-  "createIntent": "طلب شراء",
-  "placeBid": "قدّم مزايدة",
-  "createAccount": "إنشاء حساب",
+  "appTitle": "بازار إكس",
   "login": "تسجيل الدخول",
-  "signup": "تسجيل",
-  "email": "البريد الإلكتروني",
-  "password": "كلمة المرور",
-  "confirmPassword": "تأكيد كلمة المرور",
-  "guest": "المتابعة كضيف",
-  "invalid": "قيمة غير صالحة",
-  "title": "العنوان",
-  "description": "الوصف",
-  "category": "الفئة",
-  "startPrice": "السعر الابتدائي",
-  "location": "الموقع",
-  "price": "السعر",
-  "timeLeft": "الوقت المتبقي",
-  "recommendedForYou": "موصى به لك",
-  "matchedForYourRequest": "تطابق",
-  "bids": "مزايداتي",
+  "signUp": "إنشاء حساب",
+  "continueAsGuest": "الدخول كضيف",
+  "home": "الرئيسية",
+  "explore": "استكشاف",
+  "create": "إنشاء",
+  "matches": "التوفيق",
   "favorites": "المفضلة",
-  "catalog": "الكتالوج",
-  "searchHint": "ابحث عن عنصر أو فئة…",
-  "suggestions": "اقتراحات",
-  "noResults": "لا توجد نتائج",
-  "apply": "تطبيق",
+  "profile": "الحساب",
+  "search": "ابحث في المزادات والطلبات",
   "filters": "فلاتر",
-  "allCategories": "جميع الفئات",
-  "activeOnly": "نشط فقط",
-  "orders": "الطلبات",
-  "listingsTab": "عروض البيع",
-  "intentsTab": "طلبات الشراء",
-  "settings": "الإعدادات",
+  "placeBid": "قدّم مزايدة",
+  "addWanted": "أضف طلب شراء",
+  "aiInfo": "معلومات بالذكاء",
   "darkMode": "الوضع الداكن",
   "language": "اللغة",
-  "favCategories": "الفئات المفضلة",
-  "priceRange": "نطاق السعر",
-  "referralCode": "رمز الإحالة",
+  "english": "الإنجليزية",
+  "arabic": "العربية",
+  "systemDefault": "النظام",
+  "tabForYou": "لك",
+  "tabAuctions": "مزادات",
+  "tabWanted": "طلبات",
+  "wantedDraftSavedMock": "تم حفظ مسودة الطلب (نشر تجريبي قريباً)",
+  "specs": "المواصفات",
+  "budget": "الميزانية",
+  "category": "الفئة",
+  "publish": "نشر",
+  "publishMock": "نشر تجريبي",
+  "auctionDraftSavedMock": "تم حفظ مسودة المزاد (نشر تجريبي قريباً)",
+  "images": "الصور",
+  "mockImageLabel": "صورة تجريبية {index}",
+  "@mockImageLabel": {
+    "placeholders": {
+      "index": {
+        "type": "int"
+      }
+    }
+  },
+  "addPlaceholderImage": "أضف صورة بديلة",
+  "atLeastOneImageRequired": "يلزم صورة واحدة على الأقل",
+  "errorEmailRequired": "البريد الإلكتروني مطلوب",
+  "errorEmailInvalid": "أدخل بريداً صالحاً",
+  "errorPasswordRequired": "كلمة المرور مطلوبة",
+  "errorPasswordMin": "يجب أن تكون كلمة المرور {min} أحرف على الأقل",
+  "@errorPasswordMin": {
+    "placeholders": {
+      "min": {
+        "type": "int"
+      }
+    }
+  },
+  "errorNameShort": "الاسم قصير جداً",
+  "errorPasswordsMismatch": "كلمتا المرور غير متطابقتين",
+  "errorTitleShort": "العنوان قصير جداً",
+  "errorValueMustBePositive": "{label} يجب أن يكون موجباً",
+  "@errorValueMustBePositive": {
+    "placeholders": {
+      "label": {
+        "type": "String"
+      }
+    }
+  },
+  "errorAddImage": "أضف صورة واحدة على الأقل",
+  "details": "التفاصيل",
+  "pricing": "التسعير",
+  "skip": "تخطي",
+  "next": "التالي",
+  "done": "تم",
+  "sort": "ترتيب:",
+  "sortBy": "ترتيب حسب:",
+  "sortScore": "النتيجة",
+  "sortBuyerId": "معرف المشتري",
+  "buyerLabel": "المشتري {id}",
+  "@buyerLabel": {
+    "placeholders": {
+      "id": {
+        "type": "String"
+      }
+    }
+  },
+  "invite": "دعوة",
+  "offer": "عرض",
+  "currentBidValue": "أعلى مزايدة: {amount}",
+  "@currentBidValue": {
+    "placeholders": {
+      "amount": {
+        "type": "String"
+      }
+    }
+  },
+  "submitBid": "إرسال المزايدة",
+  "aiInsights": "رؤى الذكاء",
+  "approxPrice": "السعر التقديري: {amount}",
+  "@approxPrice": {
+    "placeholders": {
+      "amount": {
+        "type": "String"
+      }
+    }
+  },
+  "prosDescription": "الإيجابيات: تصميم صناعي بسيط مع لمسات ليمونية.",
+  "consDescription": "السلبيات: بيانات تجريبية، يرجى تأكيد الحالة.",
+  "aiSummaryTemplate": "ملخص بالذكاء: {title} بلمسة ليمونية جاهزة للبيئات الصناعية.",
+  "@aiSummaryTemplate": {
+    "placeholders": {
+      "title": {
+        "type": "String"
+      }
+    }
+  },
+  "auctionDetails": "تفاصيل المزاد",
+  "auctionNotFound": "لم يتم العثور على المزاد",
+  "endsIn": "ينتهي خلال {time}",
+  "@endsIn": {
+    "placeholders": {
+      "time": {
+        "type": "String"
+      }
+    }
+  },
+  "bidPlaced": "تم تقديم مزايدة بقيمة {amount}",
+  "@bidPlaced": {
+    "placeholders": {
+      "amount": {
+        "type": "String"
+      }
+    }
+  },
+  "bidHistory": "سجل المزايدات",
+  "bidderLabel": "المزايد #{number}",
+  "@bidderLabel": {
+    "placeholders": {
+      "number": {
+        "type": "int"
+      }
+    }
+  },
+  "mockTimestamp": "توقيت تجريبي",
+  "usdAmount": "{amount} دولار",
+  "@usdAmount": {
+    "placeholders": {
+      "amount": {
+        "type": "String"
+      }
+    }
+  },
+  "noFavoritesYet": "لا توجد عناصر مفضلة بعد",
+  "forgotPassword": "نسيت كلمة المرور؟",
+  "loggedInMock": "تم تسجيل الدخول (تجريبي)",
+  "resetLinkSentMock": "تم إرسال رابط إعادة التعيين (تجريبي)",
+  "accountCreatedMock": "تم إنشاء الحساب (تجريبي)",
+  "guestModeActivated": "تم تفعيل وضع الضيف",
+  "guestSession": "جلسة ضيف",
+  "member": "عضو",
+  "helpFaq": "المساعدة والأسئلة الشائعة",
+  "onboardingIndustrial": "تعريفات صناعية",
+  "onboardingSell": "بع بسهولة عبر المزادات",
+  "onboardingFind": "اعثر على المشترين الباحثين",
+  "onboardingAi": "رؤى جاهزة بالذكاء الاصطناعي",
+  "faqHowBid": "كيف أقدّم مزايدة؟",
+  "faqHowBidAnswer": "افتح مزاداً، اضغط على زر تقديم المزايدة ثم أكد العملية التجريبية.",
+  "faqHowWanted": "كيف أضيف طلب شراء؟",
+  "faqHowWantedAnswer": "انتقل إلى تبويب الإنشاء وأكمل خطوات معالج الطلب.",
+  "faqContactSupport": "التواصل مع الدعم (تجريبي)",
+  "wantedBoard": "لوحة الطلبات",
+  "budgetValue": "الميزانية: {amount} دولار",
+  "@budgetValue": {
+    "placeholders": {
+      "amount": {
+        "type": "String"
+      }
+    }
+  },
+  "budgetShort": "الميزانية {amount} دولار",
+  "@budgetShort": {
+    "placeholders": {
+      "amount": {
+        "type": "String"
+      }
+    }
+  },
+  "locationValue": "الموقع: {location}",
+  "@locationValue": {
+    "placeholders": {
+      "location": {
+        "type": "String"
+      }
+    }
+  },
+  "suggestItem": "اقترح عنصراً",
+  "suggestItemMock": "اقتراح عنصر (تجريبي)",
+  "relevance": "الملاءمة",
+  "price": "السعر",
+  "endTime": "وقت الانتهاء",
+  "noResults": "لا توجد نتائج",
+  "notifications": "الإشعارات",
+  "notificationAuctionEnding": "المزاد ينتهي قريباً",
+  "notificationNewBid": "استلمت مزايدة جديدة",
+  "notificationWantedMatch": "تطابق جديد لطلبك",
+  "notificationPriceDrop": "تم رصد خفض في السعر",
+  "notificationSystem": "صيانة للنظام مجدولة",
+  "timeJustNow": "الآن",
+  "timeMinutesAgo": "قبل {minutes} دقيقة",
+  "@timeMinutesAgo": {
+    "placeholders": {
+      "minutes": {
+        "type": "int"
+      }
+    }
+  },
+  "timeHoursAgo": "قبل {hours} ساعة",
+  "@timeHoursAgo": {
+    "placeholders": {
+      "hours": {
+        "type": "int"
+      }
+    }
+  },
+  "timeDaysAgo": "قبل {days} يوم",
+  "@timeDaysAgo": {
+    "placeholders": {
+      "days": {
+        "type": "int"
+      }
+    }
+  },
+  "notificationSettingsSoon": "إعدادات الإشعارات قريباً",
   "logout": "تسجيل الخروج",
-  "save": "حفظ",
-  "createIntentAction": "إنشاء طلب شراء",
-  "bidsPageTitle": "قائمة المزايدات",
-  "allCategoriesLabel": "الكل",
-  "applyFilters": "تطبيق الفلاتر",
-  "ordersPageTitle": "طلباتي",
-  "priceRangeLabel": "نطاق السعر",
-  "activeOnlyLabel": "نشط فقط",
-  "darkModeLabel": "الوضع الداكن",
-  "languageLabel": "اللغة",
-  "referralCopied": "تم نسخ رمز الإحالة",
-  "swipeDeckEmpty": "لا توجد مزادات حاليًا"
+  "logoutMock": "تسجيل خروج تجريبي (ابقَ كضيف)",
+  "email": "البريد الإلكتروني",
+  "password": "كلمة المرور",
+  "fullName": "الاسم الكامل",
+  "confirmPassword": "تأكيد كلمة المرور",
+  "title": "العنوان",
+  "description": "الوصف",
+  "startPrice": "سعر البدء",
+  "maxPrice": "الحد الأقصى للسعر",
+  "location": "الموقع",
+  "yourBid": "مزايدتك",
+  "allCategories": "الكل",
+  "bidMustExceedCurrent": "يجب أن تكون المزايدة أعلى من الحالية",
+  "bidsAndLocation": "{bids} مزايدة · {location}",
+  "@bidsAndLocation": {
+    "placeholders": {
+      "bids": {
+        "type": "int"
+      },
+      "location": {
+        "type": "String"
+      }
+    }
+  }
 }

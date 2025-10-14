@@ -1,57 +1,256 @@
 {
   "@@locale": "en",
-  "appTitle": "BentoBid — Swipe Auctions",
-  "swipeToExplore": "Swipe to explore",
-  "createListing": "Create Listing",
-  "createIntent": "Create intent",
-  "placeBid": "Place Bid",
-  "createAccount": "Create account",
-  "login": "Login",
-  "signup": "Sign up",
-  "email": "Email",
-  "password": "Password",
-  "confirmPassword": "Confirm password",
-  "guest": "Continue as guest",
-  "invalid": "Invalid value",
-  "title": "Title",
-  "description": "Description",
-  "category": "Category",
-  "startPrice": "Start price",
-  "location": "Location",
-  "price": "Price",
-  "timeLeft": "Time left",
-  "recommendedForYou": "Recommended for you",
-  "matchedForYourRequest": "matches",
-  "bids": "Bids",
+  "appTitle": "BazaarX",
+  "login": "Log in",
+  "signUp": "Sign up",
+  "continueAsGuest": "Continue as guest",
+  "home": "Home",
+  "explore": "Explore",
+  "create": "Create",
+  "matches": "Matches",
   "favorites": "Favorites",
-  "catalog": "Catalog",
-  "searchHint": "Search products or categories…",
-  "suggestions": "Suggestions",
-  "noResults": "No results",
-  "apply": "Apply",
+  "profile": "Profile",
+  "search": "Search auctions & wanted",
   "filters": "Filters",
-  "allCategories": "All categories",
-  "activeOnly": "Active only",
-  "orders": "Orders",
-  "listingsTab": "Sell Listings",
-  "intentsTab": "Buy Intents",
-  "settings": "Settings",
+  "placeBid": "Place bid",
+  "addWanted": "Add wanted",
+  "aiInfo": "AI info",
   "darkMode": "Dark mode",
   "language": "Language",
-  "favCategories": "Favourite categories",
-  "priceRange": "Price range",
-  "referralCode": "Referral code",
+  "english": "English",
+  "arabic": "Arabic",
+  "systemDefault": "System",
+  "tabForYou": "For you",
+  "tabAuctions": "Auctions",
+  "tabWanted": "Wanted",
+  "wantedDraftSavedMock": "Wanted draft saved (mock publish soon)",
+  "specs": "Specs",
+  "budget": "Budget",
+  "category": "Category",
+  "publish": "Publish",
+  "publishMock": "Publish mock",
+  "auctionDraftSavedMock": "Auction draft saved (mock publish soon)",
+  "images": "Images",
+  "mockImageLabel": "Mock image {index}",
+  "@mockImageLabel": {
+    "placeholders": {
+      "index": {
+        "type": "int"
+      }
+    }
+  },
+  "addPlaceholderImage": "Add placeholder image",
+  "atLeastOneImageRequired": "At least one image required",
+  "errorEmailRequired": "Email required",
+  "errorEmailInvalid": "Enter a valid email",
+  "errorPasswordRequired": "Password required",
+  "errorPasswordMin": "Password must be at least {min} characters",
+  "@errorPasswordMin": {
+    "placeholders": {
+      "min": {
+        "type": "int"
+      }
+    }
+  },
+  "errorNameShort": "Name too short",
+  "errorPasswordsMismatch": "Passwords do not match",
+  "errorTitleShort": "Title too short",
+  "errorValueMustBePositive": "{label} must be positive",
+  "@errorValueMustBePositive": {
+    "placeholders": {
+      "label": {
+        "type": "String"
+      }
+    }
+  },
+  "errorAddImage": "Add at least one image",
+  "details": "Details",
+  "pricing": "Pricing",
+  "skip": "Skip",
+  "next": "Next",
+  "done": "Done",
+  "sort": "Sort:",
+  "sortBy": "Sort by:",
+  "sortScore": "Score",
+  "sortBuyerId": "Buyer ID",
+  "buyerLabel": "Buyer {id}",
+  "@buyerLabel": {
+    "placeholders": {
+      "id": {
+        "type": "String"
+      }
+    }
+  },
+  "invite": "Invite",
+  "offer": "Offer",
+  "currentBidValue": "Current bid: {amount}",
+  "@currentBidValue": {
+    "placeholders": {
+      "amount": {
+        "type": "String"
+      }
+    }
+  },
+  "submitBid": "Submit bid",
+  "aiInsights": "AI insights",
+  "approxPrice": "Approx price: {amount}",
+  "@approxPrice": {
+    "placeholders": {
+      "amount": {
+        "type": "String"
+      }
+    }
+  },
+  "prosDescription": "Pros: Industrial minimal build, lime-accented detailing.",
+  "consDescription": "Cons: Mock data, confirm condition.",
+  "aiSummaryTemplate": "AI summary: {title} with lime aesthetic ready for industrial setups.",
+  "@aiSummaryTemplate": {
+    "placeholders": {
+      "title": {
+        "type": "String"
+      }
+    }
+  },
+  "auctionDetails": "Auction details",
+  "auctionNotFound": "Auction not found",
+  "endsIn": "Ends in {time}",
+  "@endsIn": {
+    "placeholders": {
+      "time": {
+        "type": "String"
+      }
+    }
+  },
+  "bidPlaced": "Bid placed: {amount}",
+  "@bidPlaced": {
+    "placeholders": {
+      "amount": {
+        "type": "String"
+      }
+    }
+  },
+  "bidHistory": "Bid history",
+  "bidderLabel": "Bidder #{number}",
+  "@bidderLabel": {
+    "placeholders": {
+      "number": {
+        "type": "int"
+      }
+    }
+  },
+  "mockTimestamp": "Mock timestamp",
+  "usdAmount": "{amount} USD",
+  "@usdAmount": {
+    "placeholders": {
+      "amount": {
+        "type": "String"
+      }
+    }
+  },
+  "noFavoritesYet": "No favorites yet",
+  "forgotPassword": "Forgot password?",
+  "loggedInMock": "Logged in (mock)",
+  "resetLinkSentMock": "Reset link sent (mock)",
+  "accountCreatedMock": "Account created (mock)",
+  "guestModeActivated": "Guest mode activated",
+  "guestSession": "Guest session",
+  "member": "Member",
+  "helpFaq": "Help & FAQ",
+  "onboardingIndustrial": "Industrial introductions",
+  "onboardingSell": "Sell with auctions",
+  "onboardingFind": "Find wanted buyers",
+  "onboardingAi": "AI ready insights",
+  "faqHowBid": "How to place a bid?",
+  "faqHowBidAnswer": "Open an auction, tap place bid, confirm mock bid.",
+  "faqHowWanted": "How to add wanted post?",
+  "faqHowWantedAnswer": "Navigate to create tab and fill the wanted wizard.",
+  "faqContactSupport": "Contact support (placeholder)",
+  "wantedBoard": "Wanted board",
+  "budgetValue": "Budget: {amount} USD",
+  "@budgetValue": {
+    "placeholders": {
+      "amount": {
+        "type": "String"
+      }
+    }
+  },
+  "budgetShort": "Budget {amount} USD",
+  "@budgetShort": {
+    "placeholders": {
+      "amount": {
+        "type": "String"
+      }
+    }
+  },
+  "locationValue": "Location: {location}",
+  "@locationValue": {
+    "placeholders": {
+      "location": {
+        "type": "String"
+      }
+    }
+  },
+  "suggestItem": "Suggest item",
+  "suggestItemMock": "Suggest item (mock)",
+  "relevance": "Relevance",
+  "price": "Price",
+  "endTime": "End time",
+  "noResults": "No results",
+  "notifications": "Notifications",
+  "notificationAuctionEnding": "Auction ending soon",
+  "notificationNewBid": "You received a new bid",
+  "notificationWantedMatch": "New wanted match for your listing",
+  "notificationPriceDrop": "Price drop detected",
+  "notificationSystem": "System maintenance scheduled",
+  "timeJustNow": "just now",
+  "timeMinutesAgo": "{minutes}m ago",
+  "@timeMinutesAgo": {
+    "placeholders": {
+      "minutes": {
+        "type": "int"
+      }
+    }
+  },
+  "timeHoursAgo": "{hours}h ago",
+  "@timeHoursAgo": {
+    "placeholders": {
+      "hours": {
+        "type": "int"
+      }
+    }
+  },
+  "timeDaysAgo": "{days}d ago",
+  "@timeDaysAgo": {
+    "placeholders": {
+      "days": {
+        "type": "int"
+      }
+    }
+  },
+  "notificationSettingsSoon": "Notification settings coming soon",
   "logout": "Logout",
-  "save": "Save",
-  "createIntentAction": "Create intent",
-  "bidsPageTitle": "My bids",
-  "allCategoriesLabel": "All",
-  "applyFilters": "Apply filters",
-  "ordersPageTitle": "My orders",
-  "priceRangeLabel": "Price range",
-  "activeOnlyLabel": "Active only",
-  "darkModeLabel": "Dark mode",
-  "languageLabel": "Language",
-  "referralCopied": "Referral code copied",
-  "swipeDeckEmpty": "No auctions available"
+  "logoutMock": "Logout mock (stay guest)",
+  "email": "Email",
+  "password": "Password",
+  "fullName": "Full name",
+  "confirmPassword": "Confirm password",
+  "title": "Title",
+  "description": "Description",
+  "startPrice": "Start price",
+  "maxPrice": "Max price",
+  "location": "Location",
+  "yourBid": "Your bid",
+  "allCategories": "All",
+  "bidMustExceedCurrent": "Bid must be higher than current bid",
+  "bidsAndLocation": "{bids} bids · {location}",
+  "@bidsAndLocation": {
+    "placeholders": {
+      "bids": {
+        "type": "int"
+      },
+      "location": {
+        "type": "String"
+      }
+    }
+  }
 }
